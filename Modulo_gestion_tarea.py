@@ -43,3 +43,20 @@ class proyecto_pila:
         else:
             lista_proyecto.siguiente = self.cabeza
             self.cabeza = lista_proyecto
+    
+    def mostrar_ALL_proyectos (self): #Funcion de mostrar todos los proyectos para imprimir
+        inicial = self.cabeza
+        if inicial != None:
+            while inicial:
+                print()
+                print("El id de proyecto: ",inicial.ide)
+                print("El nombre de proyecto: ",inicial.nombre)
+                print("El nombre de empresa en el proyecto: ",inicial.empresa_cliente)
+                print("La descripcion de proyecto: ",inicial.descripcion)
+                print("Fecha de inicio: ",inicial.fi)
+                print("Fecha de vencimiento: ",inicial.fv)
+                print("El porcentaje de proyecto: ",inicial.porcentaje)
+                print("Tarea de proyecto: ",inicial.tarea)
+                inicial = inicial.siguiente
+        else:
+            print("Vacio")
