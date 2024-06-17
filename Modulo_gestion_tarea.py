@@ -60,3 +60,16 @@ class proyecto_pila:
                 inicial = inicial.siguiente
         else:
             print("Vacio")
+    
+    def eliminar_archivo(self): #Funcion de para eliminar el archivo por cima de vector
+        if not self.cabeza:
+            return None
+        else:
+            self.cabeza = self.cabeza.siguiente
+    
+#Colocando para haciendo pruebas
+Test = proyecto_pila()
+Test.agreagar_proyecto()
+Test.mostrar_ALL_proyectos()
+Test.eliminar_archivo()
+Test.mostrar_ALL_proyectos()
