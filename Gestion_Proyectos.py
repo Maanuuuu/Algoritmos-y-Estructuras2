@@ -1,5 +1,10 @@
 from datetime import datetime
+import json
 
+#Funcion para la lectura de datos del JSON
+
+
+#Se declara la clase de Proyecto
 class Proyecto:
 
     def __init__(self,id,nombre,descripcion,inicio,vencimiento,estado,empresa,gerente,equipo):
@@ -7,24 +12,34 @@ class Proyecto:
         self.nombre=nombre
         self.descripcion=descripcion
         self.inicio=inicio
-        self.vencimieno=vencimiento
+        self.vencimiento=vencimiento
         self.estado=estado
         self.empresa=empresa
         self.gerente=gerente
         self.equipo=equipo
         self.tareas=[]
 
+    #Se crea una funcion para agregar tareas al proyecto
     def agregar_tarea(self,tarea):
         self.tareas.append(tarea)
 
-
+    #Funcion para mostrar todos los datos del proyecto
     def mostrar(self):
-        print('------\nID: {:<10}\nNombre: {:<15}\nDescripcion: {:<15}\nEstado: {:<15}\nEmpresa: {:<15}\nEquipo: {:<10}\nGerente: {:<10}\n'.format(self.id, self.nombre, self.descripcion,self.estado,self.empresa, self.equipo, self.gerente))
-
+        print('------')
+        print('ID: {:<10}'.format(self.id))
+        print('Nombre: {:<15}'.format(self.nombre))
+        print('Descripcion: {:<15}'.format(self.descripcion))
+        print('Inicio: {:<15}'.format(self.inicio.strftime("%d-%m-%Y")))
+        print('Vencimiento: {:<15}'.format(self.vencimiento.strftime("%d-%m-%Y")))
+        print('Estado: {:<15}'.format(self.estado))
+        print('Empresa: {:<15}'.format(self.empresa))
+        print('Gerente: {:<10}'.format(self.gerente))
+        print('Equipo: {:<10}'.format(", ".join(self.equipo)))
+        print('------')
 
 class Tarea:
 
-    def __init__(self,id,nombre,empresa,cliente,descripcion,inicio,vencimiento,estado,porcentaje):
+    def __init__(self,id,nombre,empresa,cliente,descripcion,inicio,vencimiento,estado,porcentaje=""):
         self.id=id
         self.nombre=nombre
         self.descripcion=descripcion
@@ -39,6 +54,65 @@ class Tarea:
     def agregar_subtarea(self,subtarea):
         self.subtareas.append(subtarea)
         
+
+class Subtarea:
+    def __init__(self, id, nombre, descripcion, estado):
+        self.id = id
+        self.nombre = nombre
+        self.descripcion = descripcion
+        self.estado = estado
+
+
+def cargar_datos_desde_json(nombre_archivo_txt):
+    proyectos=[]
+    
+    def convertir_fecha(fecha_str):
+        return datetime.strptime(fecha_str, "%d-%m-%Y")
+
+    with open(nombre_archivo_txt, "r") as archivo_txt:
+        nombre_archivo_json = archivo_txt.readline().strip()
+
+    with open(nombre_archivo_json, "r") as archivo_json:
+        datos = json.load(archivo_json)
+        for proyecto_data in datos["proyectos"]:
+            proyecto = Proyecto(
+                proyecto_data["id"],
+                proyecto_data["nombre"],
+                proyecto_data["descripcion"],
+                convertir_fecha(proyecto_data["inicio"]),
+                convertir_fecha(proyecto_data["vencimiento"]),
+                proyecto_data["estado"],
+                proyecto_data["empresa"],
+                proyecto_data["gerente"],
+                proyecto_data["equipo"]
+            )
+            
+            for tarea_data in proyecto_data["tareas"]:
+                tarea = Tarea(
+                    tarea_data["id"],
+                    tarea_data["nombre"],
+                    tarea_data["cliente"],
+                    tarea_data["descripcion"],
+                    convertir_fecha(tarea_data["inicio"]),
+                    convertir_fecha(tarea_data["vencimiento"]),
+                    tarea_data["estado"],
+                    tarea_data["avance"]
+                )
+                for subtarea_data in tarea_data.get("subtareas", []):
+                    subtarea = Subtarea(
+                        subtarea_data["id"],
+                        subtarea_data["nombre"],
+                        subtarea_data["descripcion"],
+                        subtarea_data["estado"]
+                    )
+                    tarea.agregar_subtarea(subtarea)
+                proyecto.agregar_tarea(tarea)
+            
+            proyectos.append(proyecto)
+            
+    return proyectos
+
+
 
 
 def buscar_proyectos(proyectos):
@@ -72,8 +146,8 @@ def buscar_proyectos(proyectos):
         
 
     elif criterio=="4":
-        equipo = str(input("Introduzca nombre del equipo del proyecto: "))
-        filtrado=[proyecto for proyecto in proyectos if equipo.lower() in proyecto.equipo.lower()]
+        equipo = str(input("Introduzca integrantes del equipo del proyecto: "))
+        filtrado=[proyecto for proyecto in proyectos if equipo.lower() in proyecto.equipo]
         if filtrado==[]:
             print("No existen proyectos administrados por ese equipo")
     
@@ -82,22 +156,24 @@ def buscar_proyectos(proyectos):
     else:
         print("Opcion Invalida")
 
-    if filtrado!=[]:
+    
+    if filtrado:
         print("Proyectos encontrados: ")
         for proyecto in filtrado:
-            print('ID: {:^10} / Nombre: {:^15}  /  Empresa: {:^15}  /  Equipo: {:^10}  /  Gerente: {:^10}'.format(proyecto.id, proyecto.nombre, proyecto.empresa, proyecto.equipo, proyecto.gerente))
+            print('ID: {:^10} / Nombre: {:^15}  /  Empresa: {:^15}  /  Equipo: {:^10}  /  Gerente: {:^10}'.format(proyecto.id, proyecto.nombre, proyecto.empresa, ", ".join(proyecto.equipo), proyecto.gerente))
+
         
         seleccion=str(input("\nSeleccione el ID del proyecto que desea operar: "))
-        try:
-            lista=[proyecto for proyecto in filtrado if seleccion.lower() in proyecto.id.lower()]
-            proyecto_seleccionado=lista[0]
-            
+        for proyecto in filtrado:
+            if seleccion == str(proyecto.id):
+                return proyecto
 
-        except:
-            print("ID invalido")
-    return proyecto_seleccionado
+        print("ID invalido")
+        return None
 
-def Gestion_proyecto():
+#Definimos nuestra funcion principal para gestionar los proyectos
+def Gestion_proyecto(proyectitos):
+    #Construimos un menu para que el usuario elija la accion a realizar
     print("--------------------")
     print("Gestion del Proyecto ")
     print("Elija la operacion a realizar:")
@@ -111,6 +187,7 @@ def Gestion_proyecto():
     
 
     if opcion=="1":
+        #Se busca el proyecto con el que se va a realizar la accion elegida
         proyecto=buscar_proyectos(proyectitos)
         print("Ingrese las modificaciones del proyecto: ")
         proyecto.id=str(input("ID: "))
@@ -121,7 +198,7 @@ def Gestion_proyecto():
         proyecto.estado=str(input("Estado actual: "))
         proyecto.empresa=str(input("Empresa: "))
         proyecto.gerente=str(input("Gerente: "))
-        proyecto.equipo=str(input("Equipo: "))
+        proyecto.equipo=str(input("Equipo: ")).split(",")
     
     elif opcion=="2":
         proyecto=buscar_proyectos(proyectitos)
@@ -148,18 +225,12 @@ def Gestion_proyecto():
     
     if seguir=="1":
         print("")
-        Gestion_proyecto()
+        Gestion_proyecto(proyectitos)
     else: pass
-#id,nombre,descripcion,inicio,vencimiento,estado,empresa,gerente,equipo
 
-xd = Proyecto("01","Pro1 asas","compras",3,1,"nose","InteliX","Manue","Ventas")
-xd2 = Proyecto("02","Pro2 asasa","compras",3,1,"nose","CanTV","Santiago","Inventario")
-xd3 = Proyecto("03","Pro2 asas","compras",3,1,"nose","CanTV","Jesu","Compras")
-xd4 = Proyecto("04","Pro2 aaa" ,"compras",3,1,"nose","Lol","Manue","Compras")
+
 proyectitos=[]
+proyectitos=cargar_datos_desde_json("config.txt")
 
-proyectitos.append(xd)
-proyectitos.append(xd2)
-proyectitos.append(xd3)
-proyectitos.append(xd4)
-Gestion_proyecto()
+
+Gestion_proyecto(proyectitos)
