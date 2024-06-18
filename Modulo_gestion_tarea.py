@@ -55,6 +55,27 @@ class Cola_Al:
         else:
             self.cola.siguiente = Entarea
             self.cola = Entarea
+    
+    def mostrar_TODOS_archivos(self):
+        temp = self.cabeza
+        while temp:
+            print("Id:", temp.ide)
+            print("Nombre:", temp.nombre)
+            print("Cliente:", temp.cliente)
+            print("Descripcion:", temp.descripcion)
+            print("Fecha de inicio de tarea:", temp.fi)
+            print("Fecha de vencimiento de tarea::", temp.fv)
+            print("El estado de tarea:", temp.estado)
+            print("El avance de tarea:", temp.avance)
+            print()
+            temp = temp.siguiente
+    
+    def eliminar_archivo_cima(self):
+        if not self.cabeza:
+            return None
+        eliminado = self.cabeza
+        self.cabeza = self.cabeza.siguiente
+        return eliminado
 
 #Ingreso por Tarea
 def Ingresar_tarea():
