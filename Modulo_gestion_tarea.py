@@ -15,6 +15,51 @@ class Proyecto:
         self.tarea = tarea
         self.siguiente = None
 
+#Crear la class "Tarea" para crear el objeto de tarea
+class Tarea:
+
+    def __init__(self,ide,nombre,cliente,descripcion,inicio,vencimiento,estado,avance=""):
+        self.ide=ide
+        self.nombre=nombre
+        self.cliente=cliente
+        self.descripcion=descripcion
+        self.inicio=inicio
+        self.vencimieno=vencimiento
+        self.estado=estado
+        self.avance=avance
+        self.subtareas=[]
+
+    def agregar_subtarea(self,subtarea):
+        self.subtareas.append(subtarea)
+
+#Crear la class "Subtarea" para crear el objeto de subtarea
+class Subtarea:
+    def __init__(self, ide, nombre, descripcion, estado):
+        self.ide = ide
+        self.nombre = nombre
+        self.descripcion = descripcion
+        self.estado = estado
+
+#Ingreso por Tarea
+def Ingresar_tarea():
+    ide = int(input("El id de tarea: "))
+    nombre = input("El nombre de tarea: ")
+    cliente = input("El nombre de cliente en la tarea: ")
+    descripcion = input("La descripcion de tarea: ")
+    fi = input("Fecha de inicio de tarea: ")
+    fv = input("Fecha de vencimiento de tarea: ")
+    estado = input("El estado de tarea: ")
+    avance = int(input("El avance de tarea: "))
+    return ide,nombre,cliente,descripcion,fi,fv,estado,avance
+
+#Ingreso por Subtarea
+def Ingresar_subtarea ():
+    ide = int(input("Id de proyecto: "))
+    nombre = input("El nombre de Subtarea: ")
+    descripcion = input("La descripcion de subtarea: ")
+    estado_actual = input("El estado actual de proyecto: ")
+    return ide,nombre,descripcion,estado_actual
+
 #Para el usuario que pueda ingresar
 def Ingresar ():
     ide = int(input("El id de proyecto: "))
