@@ -28,6 +28,7 @@ class Tarea:
         self.estado=estado
         self.avance=avance
         self.subtareas=[]
+        self.siguiente = None
 
     def agregar_subtarea(self,subtarea):
         self.subtareas.append(subtarea)
@@ -39,6 +40,21 @@ class Subtarea:
         self.nombre = nombre
         self.descripcion = descripcion
         self.estado = estado
+
+#Generar clase Cola para almacenar
+class Cola_Al:
+    def __init__(self):
+        self.cabeza = None
+        self.cola = None
+    
+    def agregar_archivo(self, ide,nombre,cliente,descripcion,fi,fv,estado,avance):
+        Entarea = Tarea(ide,nombre,cliente,descripcion,fi,fv,estado,avance)
+        if not self.cabeza:
+            self.cabeza = Entarea
+            self.cola = Entarea
+        else:
+            self.cola.siguiente = Entarea
+            self.cola = Entarea
 
 #Ingreso por Tarea
 def Ingresar_tarea():
