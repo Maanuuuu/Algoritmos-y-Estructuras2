@@ -62,175 +62,224 @@ class Subtarea:
         self.descripcion = descripcion
         self.estado = estado
 
-
-def cargar_datos_desde_json(nombre_archivo_txt):
-    proyectos=[]
+class Cargar:
     
-    def convertir_fecha(fecha_str):
-        return datetime.strptime(fecha_str, "%d-%m-%Y")
+    def __init__(self):
+        pass
+    def cargar_datos_desde_json(nombre_archivo_txt):
+        proyectos=[]
+        
+        def convertir_fecha(fecha_str):
+            return datetime.strptime(fecha_str, "%d-%m-%Y")
 
-    with open(nombre_archivo_txt, "r") as archivo_txt:
-        nombre_archivo_json = archivo_txt.readline().strip()
+        with open(nombre_archivo_txt, "r") as archivo_txt:
+            nombre_archivo_json = archivo_txt.readline().strip()
 
-    with open(nombre_archivo_json, "r") as archivo_json:
-        datos = json.load(archivo_json)
-        for proyecto_data in datos["proyectos"]:
-            proyecto = Proyecto(
-                proyecto_data["id"],
-                proyecto_data["nombre"],
-                proyecto_data["descripcion"],
-                convertir_fecha(proyecto_data["inicio"]),
-                convertir_fecha(proyecto_data["vencimiento"]),
-                proyecto_data["estado"],
-                proyecto_data["empresa"],
-                proyecto_data["gerente"],
-                proyecto_data["equipo"]
-            )
-            
-            for tarea_data in proyecto_data["tareas"]:
-                tarea = Tarea(
-                    tarea_data["id"],
-                    tarea_data["nombre"],
-                    tarea_data["cliente"],
-                    tarea_data["descripcion"],
-                    convertir_fecha(tarea_data["inicio"]),
-                    convertir_fecha(tarea_data["vencimiento"]),
-                    tarea_data["estado"],
-                    tarea_data["avance"]
+        with open(nombre_archivo_json, "r") as archivo_json:
+            datos = json.load(archivo_json)
+            for proyecto_data in datos["proyectos"]:
+                proyecto = Proyecto(
+                    proyecto_data["id"],
+                    proyecto_data["nombre"],
+                    proyecto_data["descripcion"],
+                    convertir_fecha(proyecto_data["inicio"]),
+                    convertir_fecha(proyecto_data["vencimiento"]),
+                    proyecto_data["estado"],
+                    proyecto_data["empresa"],
+                    proyecto_data["gerente"],
+                    proyecto_data["equipo"]
                 )
-                for subtarea_data in tarea_data.get("subtareas", []):
-                    subtarea = Subtarea(
-                        subtarea_data["id"],
-                        subtarea_data["nombre"],
-                        subtarea_data["descripcion"],
-                        subtarea_data["estado"]
+                
+                for tarea_data in proyecto_data["tareas"]:
+                    tarea = Tarea(
+                        tarea_data["id"],
+                        tarea_data["nombre"],
+                        tarea_data["cliente"],
+                        tarea_data["descripcion"],
+                        convertir_fecha(tarea_data["inicio"]),
+                        convertir_fecha(tarea_data["vencimiento"]),
+                        tarea_data["estado"],
+                        tarea_data["avance"]
                     )
-                    tarea.agregar_subtarea(subtarea)
-                proyecto.agregar_tarea(tarea)
-            
-            proyectos.append(proyecto)
-            
-    return proyectos
+                    for subtarea_data in tarea_data.get("subtareas", []):
+                        subtarea = Subtarea(
+                            subtarea_data["id"],
+                            subtarea_data["nombre"],
+                            subtarea_data["descripcion"],
+                            subtarea_data["estado"]
+                        )
+                        tarea.agregar_subtarea(subtarea)
+                    proyecto.agregar_tarea(tarea)
+                
+                proyectos.append(proyecto)
+                
+        return proyectos
 
 
 
 
-def buscar_proyectos(proyectos):
-    print("Buscar Proyecto por: ")
-    
-    print("1.- Nombre: ")
-    print("2.- Empresa: ")
-    print("3.- Gerente: ")
-    print("4.- Equipo: ")
-    criterio=str(input("Ingrese opcion: "))
 
-
-    if criterio=="1":
-        nombre = str(input("Introduzca el nombre del proyecto: "))
-        filtrado=[proyecto for proyecto in proyectos if nombre.lower() in proyecto.nombre.lower()]
-        if filtrado==[]:
-            print("No existen proyectos con ese nombre")
-        
-    elif criterio=="2":
-        empresa = str(input("Introduzca la empresa del proyecto: "))
-        filtrado=[proyecto for proyecto in proyectos if empresa.lower() in proyecto.empresa.lower()]
-        if filtrado==[]:
-            print("No existen proyectos de esa empresa")
-
-
-    elif criterio=="3":
-        gerente = str(input("Introduzca nombre del gerente del proyecto: "))
-        filtrado=[proyecto for proyecto in proyectos if gerente.lower() in proyecto.gerente.lower()]
-        if filtrado==[]:
-            print("No existen proyectos administrados por ese gerente")
-        
-
-    elif criterio=="4":
-        equipo = str(input("Introduzca integrantes del equipo del proyecto: "))
-        filtrado=[proyecto for proyecto in proyectos if equipo.lower() in proyecto.equipo]
-        if filtrado==[]:
-            print("No existen proyectos administrados por ese equipo")
-    
-
-    
-    else:
-        print("Opcion Invalida")
-
-    
-    if filtrado:
-        print("Proyectos encontrados: ")
-        for proyecto in filtrado:
-            print('ID: {:^10} / Nombre: {:^15}  /  Empresa: {:^15}  /  Equipo: {:^10}  /  Gerente: {:^10}'.format(proyecto.id, proyecto.nombre, proyecto.empresa, ", ".join(proyecto.equipo), proyecto.gerente))
-
-        
-        seleccion=str(input("\nSeleccione el ID del proyecto que desea operar: "))
-        for proyecto in filtrado:
-            if seleccion == str(proyecto.id):
-                return proyecto
-
-        print("ID invalido")
-        return None
 
 #Definimos nuestra funcion principal para gestionar los proyectos
-def Gestion_proyecto(proyectitos):
-    #Construimos un menu para que el usuario elija la accion a realizar
-    print("--------------------")
-    print("Gestion del Proyecto ")
-    print("Elija la operacion a realizar:")
-    print("1.- Modificar. ")
-    print("2.- Consultar. ")
-    print("3.- Listar. ")
-    print("4.- Eliminar. ")
+class Gestion_de_proyecto:
+    def __init__(self):
+        self.proyectitos=[]
+        self.proyectitos=Cargar.cargar_datos_desde_json("config.txt")
+        self.menu(self.proyectitos)
+        
+    def buscar_proyectos(self,proyectos):
+        print("Buscar Proyecto por: ")
+        print("1.- Nombre: ")
+        print("2.- Empresa: ")
+        print("3.- Gerente: ")
+        print("4.- Equipo: ")
+        criterio=str(input("Ingrese opcion: "))
 
-    opcion=str(input("Ingrese opcion: "))
-    print()
-    
 
-    if opcion=="1":
-        #Se busca el proyecto con el que se va a realizar la accion elegida
-        proyecto=buscar_proyectos(proyectitos)
-        print("Ingrese las modificaciones del proyecto: ")
-        proyecto.id=str(input("ID: "))
-        proyecto.nombre=str(input("Nombre: "))
-        proyecto.descripcion=str(input("Descripcion: "))
-        proyecto.inicio = datetime.strptime(input("Ingrese la fecha de inicio del proyecto (Dia-Mes-Año): "), "%d-%m-%Y")
-        proyecto.vencimiento = datetime.strptime(input("Ingrese la fecha de vencimiento del proyecto (Dia-Mes-Año): "), "%d-%m-%Y")
-        proyecto.estado=str(input("Estado actual: "))
-        proyecto.empresa=str(input("Empresa: "))
-        proyecto.gerente=str(input("Gerente: "))
-        proyecto.equipo=str(input("Equipo: ")).split(",")
-    
-    elif opcion=="2":
-        proyecto=buscar_proyectos(proyectitos)
-        print("Informacion del Proyecto:")
-        proyecto.mostrar()
+        if criterio=="1":
+            nombre = str(input("Introduzca el nombre del proyecto: "))
+            filtrado=[proyecto for proyecto in proyectos if nombre.lower() in proyecto.nombre.lower()]
+            if filtrado==[]:
+                print("No existen proyectos con ese nombre")
+                return None
+            
+        elif criterio=="2":
+            empresa = str(input("Introduzca la empresa del proyecto: "))
+            filtrado=[proyecto for proyecto in proyectos if empresa.lower() in proyecto.empresa.lower()]
+            if filtrado==[]:
+                print("No existen proyectos de esa empresa")
+                return None
 
-    elif opcion=="3":
-        for proyecto in proyectitos:
-            proyecto.mostrar()
+        elif criterio=="3":
+            gerente = str(input("Introduzca nombre del gerente del proyecto: "))
+            filtrado=[proyecto for proyecto in proyectos if gerente.lower() in proyecto.gerente.lower()]
+            if filtrado==[]:
+                print("No existen proyectos administrados por ese gerente")
+                return None
 
-    elif opcion=="4":
-        proyecto=buscar_proyectos(proyectitos)
-        option=str(input("Desea borrar el proyecto "+proyecto.nombre+"?: "))
-        if option.lower()=="si":
-            proyectitos.remove(proyecto)
-            print("Proyecto Eliminado")
-        else:
-            print("Eliminacion cancelada")
+        elif criterio=="4":
+            integrante = str(input("Introduzca al integrante del equipo del proyecto: "))
+            filtrado = [proyecto for proyecto in proyectos if any(integrante.lower() in miembro.lower() for miembro in proyecto.equipo)]
+            if filtrado==[]:
+                print("No existen proyectos administrados por ese equipo")
+                return None
         
 
-    print("Desea seguir con la gestion de Proyectos?: ")
-    print("1.- Si\n2.-No")
-    seguir=(input(">. "))
+        
+        else:
+            print("Opcion Invalida")
+
+        
+        if filtrado:
+            print("Proyectos encontrados: ")
+            for proyecto in filtrado:
+                print('ID: {:^10} / Nombre: {:^15}  /  Empresa: {:^15}  /  Equipo: {:^10}  /  Gerente: {:^10}'.format(proyecto.id, proyecto.nombre, proyecto.empresa, ", ".join(proyecto.equipo), proyecto.gerente))
+
+            
+            seleccion=str(input("\nSeleccione el ID del proyecto que desea operar: "))
+            for proyecto in filtrado:
+                if seleccion == str(proyecto.id):
+                    return proyecto
+
+            print("ID invalido")
+            return None
+            
+    def menu(self,proyectitos):
+        #Construimos un menu para que el usuario elija la accion a realizar
+        print("--------------------")
+        print("Gestion del Proyecto ")
+        print("Elija la operacion a realizar:")
+        print("1.- Crear. ")
+        print("2.- Modificar. ")
+        print("3.- Consultar. ")
+        print("4.- Listar. ")
+        print("5.- Eliminar. ")
+
+        self.opcion=str(input("Ingrese opcion: "))
+        print()
+        if self.opcion=="1":
+            self.crear(self.proyectitos)
+        elif self.opcion=="2":
+            self.modificar(self.proyectitos)
+        elif self.opcion=="3":
+            self.consultar(self.proyectitos)
+        elif self.opcion=="4":
+            self.listar(self.proyectitos)
+        elif self.opcion=="5":
+            self.eliminar(self.proyectitos)
+        print()
     
-    if seguir=="1":
-        print("")
-        Gestion_proyecto(proyectitos)
-    else: pass
+        print()
+        print("----------")
+        print("Desea seguir con la gestion de Proyectos?: ")
+        print("1.- Si\n2.-No")
+        seguir=(input(">. "))
+            
+        if seguir=="1":
+            print("")
+            self.menu(self.proyectitos)
+        else: print("\nPrograma Finalizado.")
+        
+    
+    def crear(self,proyectitos):
+        print("Ingrese las especificaciones del proyecto: ")
+        new_proyecto=Proyecto(
+                id=str(input("ID: ")),
+                nombre=str(input("Nombre: ")),
+                descripcion=str(input("Descripcion: ")),
+                inicio = datetime.strptime(input("Ingrese la fecha de inicio del proyecto (Dia-Mes-Año): "), "%d-%m-%Y"),
+                vencimiento = datetime.strptime(input("Ingrese la fecha de vencimiento del proyecto (Dia-Mes-Año): "), "%d-%m-%Y"),
+                estado=str(input("Estado actual: ")),
+                empresa=str(input("Empresa: ")),
+                gerente=str(input("Gerente: ")),
+                equipo=str(input("Equipo: ")).split(",")
+            )
+        proyectitos.append(new_proyecto)         
+    
+                
+            
+    def modificar(self,proyectitos):
+        #Se busca el proyecto con el que se va a realizar la accion elegida
+        proyecto=self.buscar_proyectos(proyectitos)
+        if proyecto != None:
+            print("Ingrese las modificaciones del proyecto: ")
+            proyecto.id=str(input("ID: "))
+            proyecto.nombre=str(input("Nombre: "))
+            proyecto.descripcion=str(input("Descripcion: "))
+            proyecto.inicio = datetime.strptime(input("Ingrese la fecha de inicio del proyecto (Dia-Mes-Año): "), "%d-%m-%Y")
+            proyecto.vencimiento = datetime.strptime(input("Ingrese la fecha de vencimiento del proyecto (Dia-Mes-Año): "), "%d-%m-%Y")
+            proyecto.estado=str(input("Estado actual: "))
+            proyecto.empresa=str(input("Empresa: "))
+            proyecto.gerente=str(input("Gerente: "))
+            proyecto.equipo=str(input("Equipo: ")).split(",")
+        else: pass
+    
+    def consultar(self,proyectitos):
+        proyecto=self.buscar_proyectos(proyectitos)
+        if proyecto!=None:
+            print("Informacion del Proyecto:")
+            proyecto.mostrar()
+        else: pass
+
+    def listar(self,proyectitos):
+            for proyecto in proyectitos:
+                proyecto.mostrar()
+        
+
+    def eliminar(self,proyectitos):
+        
+        proyecto=self.buscar_proyectos(proyectitos)
+        if proyecto!=None:
+            option=str(input("Desea borrar el proyecto "+proyecto.nombre+"?: "))
+            if option.lower()=="si":
+                proyectitos.remove(proyecto)
+                print("Proyecto Eliminado")
+            else:
+                print("Eliminacion cancelada")
+        else: pass
+    
 
 
-proyectitos=[]
-proyectitos=cargar_datos_desde_json("config.txt")
 
 
-Gestion_proyecto(proyectitos)
+Gestion_de_proyecto()
