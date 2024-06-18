@@ -3,7 +3,7 @@
 #Crear la class "proyecto" para crear el objeto de proyecto
 class Proyecto:
 
-    def __init__(self,ide,nombre,empresa_cliente,descripcion,fi,fv,estado_actual,porcentaje,tarea):
+    def __init__(self,ide,nombre,empresa_cliente,descripcion,fi,fv,estado_actual,porcentaje,tarea=[]):
         self.ide = ide
         self.nombre = nombre
         self.empresa_cliente = empresa_cliente
@@ -74,6 +74,37 @@ def Ingresar ():
     #for i in range (cant):
     return ide,nombre,empresa,descripcion,fi,fv,estado_actual,porcentaje,cant
 
+#Agregar Tarea para el proyecto correspondiente
+def agregar_tarea(band,band_yn,aux_tarea):
+    while band_yn == 1:
+        if band.lower() == "s":
+            cant = input("Cuanto cantidad de tarea quiere agregar: ")
+            bandera_numeral = 0
+            while bandera_numeral==0:
+                if cant.isdigit():
+                    bandera_numeral = 1
+                else:
+                    print("")
+                    cant = input("Cuanto cantidad de tarea quiere agregar: ")
+            numeral_exitosa = int(cant)
+            for i in range (numeral_exitosa):
+                print("Tarea {0:02}".format(i+1))
+                tareaid,tareanombre,tareacliente,tareadescripcion,tareafi,tareafv,tareaestado,tareaavance = Ingresar_tarea()
+                sub_band = input("¿Desear agregar Subtarea? Si-> s No -> n: ")
+                sub_bandyn = 1
+                aux_subtarea = []
+                Montar_subtarea(sub_band,sub_bandyn,aux_subtarea)
+                tareanuevo = Tarea(tareaid,tareanombre,tareacliente,tareadescripcion,tareafi,tareafv,tareaestado,tareaavance)
+                tareanuevo.agregar_subtarea(aux_subtarea)
+                aux_tarea.append(tareanuevo)
+            band_yn = 0
+        elif band.lower() == "n":
+            print("No ha agregado nada tarea")
+            band_yn = 0
+        else:
+            print("No esta ingresado la opcion indicado, por favor ingresar de de nuevo")
+            band = input("¿Desear agregar Tarea? Si-> s No -> n: ")
+
 #Almacenar por forma de pila
 class proyecto_pila:
 
@@ -82,6 +113,10 @@ class proyecto_pila:
 
     def agreagar_proyecto(self): #Funcion de agregar
         ide,nombre,empresa_cliente,descripcion,fi,fv,estado_actual,porcentaje,tarea = Ingresar()
+        band = input("¿Desear agregar Tarea? Si-> s No -> n: ")
+        band_yn = 1 #Para que el usuario ingresa bien la opcion
+        aux_tarea = []
+
         lista_proyecto = Proyecto(ide,nombre,empresa_cliente,descripcion,fi,fv,estado_actual,porcentaje,tarea)
         if self.cabeza == None:
             self.cabeza = lista_proyecto
