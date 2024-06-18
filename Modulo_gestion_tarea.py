@@ -70,9 +70,33 @@ def Ingresar ():
     fv = input("Fecha de vencimiento de proyecto: ")
     estado_actual = input("El estado actual de proyecto: ")
     porcentaje = int(input("El porcentaje de proyecto: "))
-    cant = int(input("Cuanto cantidad de tarea quiere agregar: "))
-    #for i in range (cant):
-    return ide,nombre,empresa,descripcion,fi,fv,estado_actual,porcentaje,cant
+    return ide,nombre,empresa,descripcion,fi,fv,estado_actual,porcentaje
+
+#Agregar Subtarea area para la tarea correspondiente
+def Montar_subtarea(band,band_yn,aux_tarea):
+    while band_yn == 1:
+        if band.lower() == "s":
+            cant = input("Cuanto cantidad de subtarea quiere agregar: ")
+            bandera_numeral = 0
+            while bandera_numeral==0:
+                if cant.isdigit():
+                    bandera_numeral = 1
+                else:
+                    print("")
+                    cant = input("Cuanto cantidad de subtarea quiere agregar: ")
+            numeral_exitosa = int(cant)
+            for i in range (numeral_exitosa):
+                print("SubTarea {0:02}".format(i+1))
+                tareaid,tareanombre,tareadescripcion,tareaestado = Ingresar_subtarea()
+                tareanuevo = Subtarea(tareaid,tareanombre,tareadescripcion,tareaestado)
+                aux_tarea.append(tareanuevo)
+            band_yn = 0
+        elif band.lower() == "n":
+            print("No ha agregado nada subtarea")
+            band_yn = 0
+        else:
+            print("No esta ingresado la opcion indicado, por favor ingresar de de nuevo")
+            band = input("¿Desear agregar Subtarea? Si-> s No -> n: ")
 
 #Agregar Tarea para el proyecto correspondiente
 def agregar_tarea(band,band_yn,aux_tarea):
@@ -112,12 +136,12 @@ class proyecto_pila:
         self.cabeza = None
 
     def agreagar_proyecto(self): #Funcion de agregar
-        ide,nombre,empresa_cliente,descripcion,fi,fv,estado_actual,porcentaje,tarea = Ingresar()
+        ide,nombre,empresa_cliente,descripcion,fi,fv,estado_actual,porcentaje = Ingresar()
         band = input("¿Desear agregar Tarea? Si-> s No -> n: ")
         band_yn = 1 #Para que el usuario ingresa bien la opcion
         aux_tarea = []
-
-        lista_proyecto = Proyecto(ide,nombre,empresa_cliente,descripcion,fi,fv,estado_actual,porcentaje,tarea)
+        agregar_tarea(band,band_yn,aux_tarea)
+        lista_proyecto = Proyecto(ide,nombre,empresa_cliente,descripcion,fi,fv,estado_actual,porcentaje,aux_tarea)
         if self.cabeza == None:
             self.cabeza = lista_proyecto
         else:
