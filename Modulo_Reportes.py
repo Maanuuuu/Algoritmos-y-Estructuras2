@@ -73,12 +73,12 @@ class Reporte:
             print("3.- Despues de la fecha.")
             return input("Ingrese la opcion: ")
         
-        def fecha():
+        def pedir_fecha():
             return datetime.strptime(input("Ingrese la fecha en formato dd-mm-aaaa: "),"%d-%m-%Y")
 
         def rango():
-            fecha1=fecha()
-            fecha2=fecha()
+            fecha1=pedir_fecha()
+            fecha2=pedir_fecha()
             return fecha1,fecha2
 
         def filtrado_rango(fecha1,fecha2,criterio):
@@ -86,11 +86,11 @@ class Reporte:
             for proyecto in self.proyectitos:
                 for tarea in proyecto.tareas:
                     if criterio=="inicio":
-                        if tarea.fecha_inicio>=fecha1 and tarea.fecha_inicio<=fecha2:
+                        if tarea.inicio>=fecha1 and tarea.inicio<=fecha2:
                             pila.agregar_tarea(tarea)
 
                     else:
-                        if tarea.fecha_vencimiento>=fecha1 and tarea.fecha_vencimiento<=fecha2:
+                        if tarea.vencimiento>=fecha1 and tarea.vencimiento<=fecha2:
                             pila.agregar_tarea(tarea)
             print("---------------------------------")
             print("Tareas en rango de fechas: ")
@@ -101,10 +101,10 @@ class Reporte:
             for proyecto in self.proyectitos:
                 for tarea in proyecto.tareas:
                     if criterio=="inicio":
-                        if tarea.fecha_inicio<fecha:
+                        if tarea.inicio<fecha:
                             pila.agregar_tarea(tarea)
                     else:
-                        if tarea.fecha_vencimiento<fecha:
+                        if tarea.vencimiento<fecha:
                             pila.agregar_tarea(tarea)
             print("---------------------------------")
             print("Tareas con la fecha antes:")
@@ -115,10 +115,10 @@ class Reporte:
             for proyecto in self.proyectitos:
                 for tarea in proyecto.tareas:
                     if criterio=="inicio":
-                        if tarea.fecha_inicio>fecha:
+                        if tarea.inicio>fecha:
                             pila.agregar_tarea(tarea)
                     else:
-                        if tarea.fecha_vencimiento>fecha:
+                        if tarea.vencimiento>fecha:
                             pila.agregar_tarea(tarea)
             print("---------------------------------")
             print("Tareas con la fecha despues:")
@@ -139,14 +139,14 @@ class Reporte:
                 fecha1,fecha2=rango()
                 filtrado_rango(fecha1,fecha2,criterio)
             elif mf=="2":
-                fecha=fecha()
+                fecha=pedir_fecha()
                 filtrado_antes(fecha,criterio)
             elif mf=="3":
-                fecha=fecha()
+                fecha=pedir_fecha()
                 filtrado_despues(fecha,criterio)
             else:
                 print("Opcion invalida")
-                main()
+        main()
 
 
     def filtrado_proyectos(self,proyectitos):
