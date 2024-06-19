@@ -1,0 +1,11 @@
+ID Proyecto: 1, Nombre: Proyecto Log, Descripcion: Desarollo de modulo ventas, Empresa: CanTV , Gerente: Gerente A
+      ID Tarea: 101, Nombre: Tarea 1, Empresa: CanTV , Estado: En progreso
+      ID Tarea: 102, Nombre: Tarea 2, Empresa: CanTV , Estado: En progreso
+ID Proyecto: 2, Nombre: Proyecto Beta, Descripcion: Descripción del Proyecto Beta, Empresa: EPA, Gerente: Gerente B
+      ID Tarea: 201, Nombre: Tarea 3, Empresa: EPA, Estado: En progreso
+      ID Tarea: 202, Nombre: Tarea 4, Empresa: EPA, Estado: En progreso
+ID Proyecto: 3, Nombre: Proyecto Gamma, Descripcion: Descripción del Proyecto Gamma, Empresa: EPA, Gerente: Gerente C
+      ID Tarea: 301, Nombre: Tarea 5, Empresa: EPA, Estado: Completado
+      ID Tarea: 302, Nombre: Tarea 6, Empresa: EPA, Estado: Completado
+ID Proyecto: 9, Nombre: ProyectoModificado, Descripcion: Ventas, Empresa: Intel, Gerente: Jose
+      ID Tarea: 5, Nombre: TareaNueva, Empresa: Intel, Estado: Progreso

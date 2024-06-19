@@ -1,6 +1,6 @@
 from datetime import datetime
 import json
-import Modulo_Reportes as mr
+import datos_abstracto as da
 
 """ 
     Parcial IV Listas Enlazadas, Pilas y Colas.
@@ -8,9 +8,9 @@ import Modulo_Reportes as mr
     
     Manuel Nava  30.822.007  @Maanuuuu
     Juan Wu      30.391.117  @juanww20    
+    Jose Farrautto 
 
 """
-
 
 
 #Se declara la clase de Proyecto
@@ -57,6 +57,7 @@ class Tarea:
         self.inicio=inicio
         self.vencimiento=vencimiento
         self.estado=estado
+  
         self.porcentaje=porcentaje
         self.subtareas=subtareaaaa
         self.siguiente=None
@@ -76,6 +77,7 @@ class Tarea:
         print('Estado: {:<15}'.format(self.estado))
         print('Porcentaje: {:<10}'.format(self.porcentaje))
         print('------')
+        
 
 class Subtarea:
     def __init__(self, id, nombre, descripcion, estado):
@@ -88,6 +90,21 @@ class Cargar:
     
     def __init__(self):
         pass
+
+    
+    def escribir_datos_txt(self,nombre_archivo,proyectos):
+        with open(nombre_archivo,"w") as archivito:
+            for proyecto in proyectos:
+                archivito.write(f"ID Proyecto: {proyecto.id}, Nombre: {proyecto.nombre}, Descripcion: {proyecto.descripcion}, Empresa: {proyecto.empresa}, Gerente: {proyecto.gerente}\n")
+                for tarea in proyecto.tareas:
+                    archivito.write(f"      ID Tarea: {tarea.id}, Nombre: {tarea.nombre}, Empresa: {proyecto.empresa}, Estado: {proyecto.estado}\n")
+                
+
+
+    
+    
+
+
     def cargar_datos_desde_json(nombre_archivo_txt):
         proyectos=[]
         
@@ -137,6 +154,33 @@ class Cargar:
                 
         return proyectos
 
+#Validacion de id:
+def Identificar_id ():
+        id=str(input("ID: "))
+        band = 0
+        while band == 0:
+            if id.isdigit():
+                band = 1
+            else:
+                print("Error por mal escrito el ID, ¡debe escribir numero!")
+                id=str(input("ID: "))
+        return id
+
+def Identificar_fi ():
+    try:
+        fi= datetime.strptime(input("Ingrese la fecha de inicio del proyecto (Dia-Mes-Año): "), "%d-%m-%Y")
+    except :
+        print("Ingrese bien las fechas en formato Dia-Mes-Año")
+        fi= datetime.strptime(input("Ingrese la fecha de inicio del proyecto (Dia-Mes-Año): "), "%d-%m-%Y")
+    return fi
+
+def Identificar_fv ():
+    try:
+        fv = datetime.strptime(input("Ingrese la fecha de vencimiento del proyecto (Dia-Mes-Año): "), "%d-%m-%Y")
+    except :
+        print("Ingrese bien las fechas en formato Dia-Mes-Año")
+        fv = datetime.strptime(input("Ingrese la fecha de vencimiento del proyecto (Dia-Mes-Año): "), "%d-%m-%Y")
+    return fv
 
 #Definimos nuestra funcion principal para gestionar los proyectos
 class Gestion_de_proyecto:
@@ -225,25 +269,32 @@ class Gestion_de_proyecto:
         print("Desea seguir con la gestion de Proyectos?: ")
         print("1.- Si\n2.-No")
         seguir = (input(">. "))
-
-        if seguir == "1":
-            print("")
-            self.menu()
-        else:
-            print("\nGestion de Proyectos Finalizado.")
+        bandera_opcion_sub = 0
+        while bandera_opcion_sub == 0:
+            if seguir == "1":
+                bandera_opcion_sub = 1
+                print("")
+                self.menu()
+            elif seguir == "2":
+                bandera_opcion_sub = 1
+                print("\nGestion de Proyectos Finalizado.")
+            else:
+                print("Por favor, escribir bien el numero de opcion")
+                seguir = (input(">. "))
+                #print("\nGestion de Proyectos Finalizado.")
     
         return self.proyectitos
             
-            
-                
+    #inicio = datetime.strptime(input("Ingrese la fecha de inicio del proyecto (Dia-Mes-Año): "), "%d-%m-%Y")            
     def crear(self,proyectitos):
         print("Ingrese las especificaciones del proyecto: ")
         new_proyecto=Proyecto(
-                id=str(input("ID: ")),
+
+                id=Identificar_id(),
                 nombre=str(input("Nombre: ")),
                 descripcion=str(input("Descripcion: ")),
-                inicio = datetime.strptime(input("Ingrese la fecha de inicio del proyecto (Dia-Mes-Año): "), "%d-%m-%Y"),
-                vencimiento = datetime.strptime(input("Ingrese la fecha de vencimiento del proyecto (Dia-Mes-Año): "), "%d-%m-%Y"),
+                inicio = Identificar_fi(),
+                vencimiento = Identificar_fv(),
                 estado=str(input("Estado actual: ")),
                 empresa=str(input("Empresa: ")),
                 gerente=str(input("Gerente: ")),
@@ -258,11 +309,14 @@ class Gestion_de_proyecto:
         proyecto=self.buscar_proyectos()
         if proyecto != None:
             print("Ingrese las modificaciones del proyecto: ")
-            proyecto.id=str(input("ID: "))
+            nombre_id = Identificar_id()
+            proyecto.id=nombre_id
             proyecto.nombre=str(input("Nombre: "))
             proyecto.descripcion=str(input("Descripcion: "))
-            proyecto.inicio = datetime.strptime(input("Ingrese la fecha de inicio del proyecto (Dia-Mes-Año): "), "%d-%m-%Y")
-            proyecto.vencimiento = datetime.strptime(input("Ingrese la fecha de vencimiento del proyecto (Dia-Mes-Año): "), "%d-%m-%Y")
+            fi = Identificar_fi()
+            proyecto.inicio = fi
+            fv = Identificar_fv()
+            proyecto.vencimiento = fv
             proyecto.estado=str(input("Estado actual: "))
             proyecto.empresa=str(input("Empresa: "))
             proyecto.gerente=str(input("Gerente: "))
@@ -430,14 +484,20 @@ class proyecto_pila:
         print("Gestion de Tareas ")
         print("Elija la operacion a realizar:")
         print("1.- Agregar Tareas a Proyecto ")
-        print("2.- Mostrar Tareas del Proyecto ")
+        #print("2.- Mostrar Tareas del Proyecto ")
         print()
         self.opcion=str(input("Elija su opcion: "))
-        if self.opcion=="1":
-            self.agreagar_proyecto()
-            self.mostrar_ALL_proyectos()
-        elif self.opcion=="2":
-            pass
+        bandera_opcion = 1
+        while bandera_opcion == 1:
+            if self.opcion=="1":
+                self.agreagar_proyecto()
+                self.mostrar_ALL_proyectos()
+                bandera_opcion = 0
+            else:
+                print()
+                print("¡Por favor escribir bien la opcion!")
+                self.opcion=str(input("Elija su opcion: "))
+                
 
 
     def buscar_proyectos(self):  # Añadir self como primer parámetro
@@ -540,7 +600,195 @@ class proyecto_pila:
             borrado = self.cabeza
             self.cabeza = self.cabeza.siguiente
             return borrado
-    
+
+
+
+class Reporte:
+    def __init__(self,proyectitos):
+        self.proyectitos=proyectitos
+        
+
+    def menu_reporte(self):
+        band=True
+        while band==True:
+            print("-------------------------------")
+            print("Menu del modulo de reportes")
+            print("Elija la operacion a realizar:")
+            print("1.- Consultar tarea por estado.")
+            print("2.- Filtrado por fechas.")
+            print("3.- Filtrado de proyectos.")
+            print("4.- Listar subtareas.")
+            print("5.- Salir")
+            opcion = int(input("Ingrese la opcion: "))
+            if opcion == 1:
+                self.consult_tarea_est(self.proyectitos)
+            elif opcion == 2:
+                self.filtrado_fechas(self.proyectitos)
+            elif opcion == 3:
+                self.filtrado_proyectos(self.proyectitos)
+            elif opcion == 4:
+                self.listar_sub_tareas(self.proyectitos)
+            elif opcion == 5:
+                band=False
+
+            else:
+                print("Opcion invalida")
+
+    def consult_tarea_est(self,proyectitos):
+        list_estados=[]
+        list_pilas=[]
+        cont=0
+        dicc_estados={}
+        for proyecto in self.proyectitos:
+            for tarea in proyecto.tareas:
+                if tarea.estado in list_estados:
+                    pos=dicc_estados[tarea.estado]
+                    list_pilas[pos].agregar_tarea(tarea)
+
+                else:
+                    list_estados.append(tarea.estado)
+                    list_pilas.append(Pila_Tareas())
+                    list_pilas[cont].agregar_tarea(tarea)
+                    dicc_estados[tarea.estado]=cont
+                    cont+=1
+                
+        for i in range(len(list_pilas)):
+            print("-------------------------------------------------")
+            print("Tareas con estado: ",list_estados[i])
+            print(list_pilas[i].mostrar_pila_tareas())
+
+    def filtrado_fechas(self,proyectitos):
+        def menu_tip_fecha():
+            print("-------------------------------")
+            print("Filtrado por fechas")
+            print("Ingrese con que fecha se va a filtar: ")
+            print("1.- Fecha de inicio.")
+            print("2.- Fecha de vencimiento.")
+            return input("Ingrese la opcion: ")
+        
+        def menu_filtrado():
+            print("-------------------------------")
+            print("Filtrado por fechas")
+            print("Ingrese el tipo de filtrado: ")
+            print("1.- Rango de fechas.")
+            print("2.- Antes de la fecha.")
+            print("3.- Despues de la fecha.")
+            return input("Ingrese la opcion: ")
+        
+        def pedir_fecha():
+            return datetime.strptime(input("Ingrese la fecha en formato dd-mm-aaaa: "),"%d-%m-%Y")
+
+        def rango():
+            fecha1=pedir_fecha()
+            fecha2=pedir_fecha()
+            return fecha1,fecha2
+
+        def filtrado_rango(fecha1,fecha2,criterio):
+            pila=Pila_Tareas()
+            for proyecto in self.proyectitos:
+                for tarea in proyecto.tareas:
+                    if criterio=="inicio":
+                        if tarea.inicio>=fecha1 and tarea.inicio<=fecha2:
+                            pila.agregar_tarea(tarea)
+
+                    else:
+                        if tarea.vencimiento>=fecha1 and tarea.vencimiento<=fecha2:
+                            pila.agregar_tarea(tarea)
+            print("---------------------------------")
+            print("Tareas en rango de fechas: ")
+            print(pila.mostrar_pila_tareas())
+
+        def filtrado_antes(fecha,criterio):
+            pila=Pila_Tareas()
+            for proyecto in self.proyectitos:
+                for tarea in proyecto.tareas:
+                    if criterio=="inicio":
+                        if tarea.inicio<fecha:
+                            pila.agregar_tarea(tarea)
+                    else:
+                        if tarea.vencimiento<fecha:
+                            pila.agregar_tarea(tarea)
+            print("---------------------------------")
+            print("Tareas con la fecha antes:")
+            print(pila.mostrar_pila_tareas())
+
+        def filtrado_despues(fecha,criterio):
+            pila=Pila_Tareas()
+            for proyecto in self.proyectitos:
+                for tarea in proyecto.tareas:
+                    if criterio=="inicio":
+                        if tarea.inicio>fecha:
+                            pila.agregar_tarea(tarea)
+                    else:
+                        if tarea.vencimiento>fecha:
+                            pila.agregar_tarea(tarea)
+            print("---------------------------------")
+            print("Tareas con la fecha despues:")
+            print(pila.mostrar_pila_tareas())
+        
+        def main():
+            mtf=menu_tip_fecha()
+            if mtf=="1":
+                criterio="inicio"
+            elif mtf=="2":
+                criterio="vencimiento"
+            else:
+                print("Opcion invalida")
+                main()
+            
+            mf=menu_filtrado()
+            if mf=="1":
+                fecha1,fecha2=rango()
+                filtrado_rango(fecha1,fecha2,criterio)
+            elif mf=="2":
+                fecha=pedir_fecha()
+                filtrado_antes(fecha,criterio)
+            elif mf=="3":
+                fecha=pedir_fecha()
+                filtrado_despues(fecha,criterio)
+            else:
+                print("Opcion invalida")
+        main()
+
+
+    def filtrado_proyectos(self,proyectitos):
+        pass
+
+    def listar_sub_tareas(self,proyectitos):
+        pass
+
+
+
+
+class Nodo_Tarea:
+    def __init__(self,tarea):
+        self.tarea=tarea
+        self.siguiente = None
+
+class Pila_Tareas:
+    def __init__(self):
+        self.cabeza = None
+
+    def agregar_tarea(self,tarea):
+        nuevo_nodo = Nodo_Tarea(tarea)
+        if not self.cabeza:
+            self.cabeza = nuevo_nodo
+        else:
+            nuevo_nodo.siguiente = self.cabeza
+            self.cabeza = nuevo_nodo
+
+    def mostrar_pila_tareas(self):
+        actual = self.cabeza
+        while actual:
+            if actual.tarea.mostrar_tarea()==None:
+                pass
+            else:
+                actual.tarea.mostrar_tarea()
+            actual = actual.siguiente
+
+
+
+
 class Menu_Principal:
     
     def __init__(self):
@@ -548,6 +796,7 @@ class Menu_Principal:
         self.menu()
     
     def menu(self):
+        
         #Construimos un menu para que el usuario elija la accion a realizar
         print("--------------------")
         print("Sistema avanzado de gestion ")
@@ -559,32 +808,54 @@ class Menu_Principal:
         
         self.opcion=str(input("Elija su opcion: "))
  
-        
-        if self.opcion=="1":
-            gestion=Gestion_de_proyecto(self.proyectos)
-            self.proyectos=gestion.menu()
-            
-            
-        elif self.opcion=="2":
-
-            papa = proyecto_pila(self.proyectos)
-            papa.menu()
+        bandera_menu_opcion = 1
+        while bandera_menu_opcion == 1:
+            if self.opcion=="1":
+                bandera_menu_opcion = 0
+                gestion=Gestion_de_proyecto(self.proyectos)
+                self.proyectos=gestion.menu()
                 
-        elif self.opcion=="3":
-            reporte=mr.Reporte()
+            elif self.opcion=="2":
+                bandera_menu_opcion = 0
+                papa = proyecto_pila(self.proyectos)
+                papa.menu()
+
+            elif self.opcion=="3":
+                bandera_menu_opcion = 0
+                reporte=Reporte(self.proyectos)
+                
+                reporte.menu_reporte()
+                    
+            else:
+                print("Usted no ha seleccionado bien la opcion, por favor ingresar de nuevo")
+                self.opcion=str(input("Elija su opcion: "))
             
-            
-            
+        
+        Cargar_datos=Cargar()
+        Cargar_datos.escribir_datos_txt("datos_actualizados.txt",self.proyectos)
         print()
         print("----------")
         print("Desea seguir con el sistema de gestion?: ")
-        print("1.- Si\n2.-No")
+        print("1.- Si\n2.- No")
         seguir=(input(">. "))
-        
-        if seguir=="1":
-            print("")
-            self.menu()
-        else: print("\nPrograma Finalizado.")
+        bandera_confirmacion=1
+        while bandera_confirmacion == 1:      
+            if seguir=="1":
+                bandera_confirmacion = 0
+                print("")
+                self.menu()
+                Cargar_datos=Cargar()
+                Cargar_datos.escribir_datos_txt("datos_actualizados.txt",self.proyectos)
+            elif seguir == "2":
+                bandera_confirmacion = 0
+                Cargar_datos=Cargar()
+                Cargar_datos.escribir_datos_txt("datos_actualizados.txt",self.proyectos)
+                print("\nPrograma Finalizado.")
+                bandera_menu_opcion=0
+                break
+            else:
+                print("Por favor, escribir bien el numero de opcion")
+                seguir=(input(">. "))
         
 hola=Menu_Principal()
         

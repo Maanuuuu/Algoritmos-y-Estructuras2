@@ -3,10 +3,9 @@ import datos_abstracto as da
 from datetime import datetime
 
 class Reporte:
-    def __init__(self):
-        self.proyectitos=[]
-        self.proyectitos=gp.Cargar.cargar_datos_desde_json("config.txt")
-        self.menu(self.proyectitos)
+    def __init__(self,proyectitos):
+        self.proyectitos=proyectitos
+        
 
     def menu(self,proyectitos):
         while True:
@@ -28,7 +27,7 @@ class Reporte:
             elif opcion == 4:
                 self.listar_sub_tareas(self.proyectitos)
             elif opcion == 5:
-                break
+                print("a")
             else:
                 print("Opcion invalida")
 
