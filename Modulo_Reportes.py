@@ -82,36 +82,47 @@ class Reporte:
             return fecha1,fecha2
 
         def filtrado_rango(fecha1,fecha2,criterio):
+            pila=da.Pila_Tareas()
             for proyecto in self.proyectitos:
                 for tarea in proyecto.tareas:
                     if criterio=="inicio":
                         if tarea.fecha_inicio>=fecha1 and tarea.fecha_inicio<=fecha2:
-                            pass
+                            pila.agregar_tarea(tarea)
+
                     else:
                         if tarea.fecha_vencimiento>=fecha1 and tarea.fecha_vencimiento<=fecha2:
-                            pass
-
+                            pila.agregar_tarea(tarea)
+            print("---------------------------------")
+            print("Tareas en rango de fechas: ")
+            print(pila.mostrar_pila_tareas())
 
         def filtrado_antes(fecha,criterio):
+            pila=da.Pila_Tareas()
             for proyecto in self.proyectitos:
                 for tarea in proyecto.tareas:
                     if criterio=="inicio":
                         if tarea.fecha_inicio<fecha:
-                            pass
+                            pila.agregar_tarea(tarea)
                     else:
                         if tarea.fecha_vencimiento<fecha:
-                            pass
+                            pila.agregar_tarea(tarea)
+            print("---------------------------------")
+            print("Tareas con la fecha antes:")
+            print(pila.mostrar_pila_tareas())
 
         def filtrado_despues(fecha,criterio):
+            pila=da.Pila_Tareas()
             for proyecto in self.proyectitos:
                 for tarea in proyecto.tareas:
                     if criterio=="inicio":
                         if tarea.fecha_inicio>fecha:
-                            pass
+                            pila.agregar_tarea(tarea)
                     else:
                         if tarea.fecha_vencimiento>fecha:
-                            pass
-                    
+                            pila.agregar_tarea(tarea)
+            print("---------------------------------")
+            print("Tareas con la fecha despues:")
+            print(pila.mostrar_pila_tareas())
         
         def main():
             mtf=menu_tip_fecha()
