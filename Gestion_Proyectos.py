@@ -1,7 +1,14 @@
 from datetime import datetime
 import json
 
-#Funcion para la lectura de datos del JSON
+""" 
+    Parcial IV Listas Enlazadas, Pilas y Colas.
+    Seccion: 305C1
+    
+    Manuel Nava  30.822.007  @Maanuuuu
+    Juan Wu      30.391.117  @juanww20    
+
+"""
 
 
 #Se declara la clase de Proyecto
@@ -40,7 +47,7 @@ class Proyecto:
 
 class Tarea:
 
-    def __init__(self,id,nombre,empresa,descripcion,inicio,vencimiento,estado,porcentaje=""):
+    def __init__(self,id,nombre,empresa,descripcion,inicio,vencimiento,estado,porcentaje="",subtareaaaa=[]):
         self.id=id
         self.nombre=nombre
         self.empresa=empresa
@@ -50,7 +57,7 @@ class Tarea:
         self.estado=estado
   
         self.porcentaje=porcentaje
-        self.subtareas=[]
+        self.subtareas=subtareaaaa
         self.siguiente=None
 
 
@@ -119,14 +126,10 @@ class Cargar:
         return proyectos
 
 
-
-
-
-
 #Definimos nuestra funcion principal para gestionar los proyectos
 class Gestion_de_proyecto:
-    def __init__(self):
-        self.proyectitos=Cargar.cargar_datos_desde_json("config.txt")
+    def __init__(self,proyectos):
+        self.proyectitos=proyectos
         
         
     def buscar_proyectos(self):  # Añadir self como primer parámetro
@@ -215,7 +218,10 @@ class Gestion_de_proyecto:
             print("")
             self.menu()
         else:
-            print("\nPrograma Finalizado.")
+            print("\nGestion de Proyectos Finalizado.")
+    
+        return self.proyectitos
+            
             
                 
     def crear(self,proyectitos):
@@ -231,7 +237,7 @@ class Gestion_de_proyecto:
                 gerente=str(input("Gerente: ")),
                 equipo=str(input("Equipo: ")).split(",")
             )
-        proyectitos.append(new_proyecto)         
+        proyectitos.append(new_proyecto) 
     
                 
             
@@ -276,7 +282,28 @@ class Gestion_de_proyecto:
         else: pass
 
 
+
+#Generar clase Cola para almacenar
+class Cola_Al:
+    def __init__(self):
+        self.cabeza = None
+        self.cola = None
+    
+    def agregar_archivo(self, ide,nombre,cliente,descripcion,fi,fv,estado,avance,subtarea):
+        Entarea = Tarea(ide,nombre,cliente,descripcion,fi,fv,estado,avance,subtarea)
+        if not self.cabeza:
+            self.cabeza = Entarea
+            self.cola = Entarea
+        else:
+            self.cola.siguiente = Entarea
+            self.cola = Entarea
+
+
+
+
 def agregar_tarea(band,band_yn,aux_tarea,proyecto):
+    Lista_cola = Cola_Al() #Esto es para crear la class "cola" para almacenar
+    bandera_cola = 1
     while band_yn == 1:
         if band.lower() == "s":
             cant = input("Cuanto cantidad de tarea quiere agregar: ")
@@ -291,12 +318,28 @@ def agregar_tarea(band,band_yn,aux_tarea,proyecto):
             for i in range (numeral_exitosa):
                 print("Tarea {0:02}".format(i+1))
                 tareaid,tareanombre,tareaempresa_cliente,tareadescripcion,tareafi,tareafv,tareaestado,tareaavance = Ingresar_tarea()
-                band = input("¿Desear agregar Subtarea? Si-> s No -> n: ")
-
-                tareanuevo = Tarea(tareaid,tareanombre,tareaempresa_cliente,tareadescripcion,tareafi,tareafv,tareaestado,tareaavance)
-                print(tareanuevo.descripcion)
-                aux_tarea.append(tareanuevo)
-                proyecto.tareas.append(tareanuevo)
+                bandera_subtarea = input("¿Desear agregar Subtarea? Si-> s No -> n: ")
+                bandyn = 1
+                aux_subtarea = []
+                Montar_subtarea(bandera_subtarea,bandyn,aux_subtarea)
+                #tareanuevo = Tarea(tareaid,tareanombre,tareaempresa_cliente,tareadescripcion,tareafi,tareafv,tareaestado,tareaavance)
+                Lista_cola.agregar_archivo(tareaid,tareanombre,tareaempresa_cliente,tareadescripcion,tareafi,tareafv,tareaestado,tareaavance,aux_subtarea)
+            inicial = Lista_cola.cabeza
+            #print(tareanuevo.descripcion)
+            if inicial != None:
+                while inicial:
+                    idd = inicial.id
+                    nombree = inicial.nombre
+                    empresaa = inicial.empresa
+                    descripcionn = inicial.descripcion
+                    inicioo = inicial.inicio
+                    vencimientoo = inicial.vencimiento
+                    estadoo = inicial.estado
+                    porcentajee = inicial.porcentaje
+                    aux_acomodando = Tarea(idd,nombree,empresaa,descripcionn,inicioo,vencimientoo,estadoo,porcentajee)
+                    aux_tarea.append(aux_acomodando)
+                    proyecto.tareas.append(aux_acomodando)
+                    inicial = inicial.siguiente
             band_yn = 0
         elif band.lower() == "n":
             print("No ha agregado nada tarea")
@@ -304,9 +347,17 @@ def agregar_tarea(band,band_yn,aux_tarea,proyecto):
         else:
             print("No esta ingresado la opcion indicado, por favor ingresar de de nuevo")
             band = input("¿Desear agregar Tarea? Si-> s No -> n: ")
+    
 
 def Ingresar_tarea():
-    ide = int(input("El id de tarea: "))
+    ide = input("El id de tarea: ")
+    baka = 0
+    while baka == 0:
+        if ide.isdigit():
+            baka = 1
+        else:
+            print("Usted no ha ingresado de manera correcta, por favor ingresar de nuevo")
+            ide = input("El id de tarea: ")
     nombre = input("El nombre de tarea: ")
     empresa_cliente = input("Empresa Cliente de la tarea: ")
     descripcion = input("La descripcion de tarea: ")
@@ -357,13 +408,81 @@ def Montar_subtarea(band,band_yn,aux_tarea):
 
 
 class proyecto_pila:
-    def __init__(self):
+    def __init__(self,proyectos):
         self.cabeza = None
+        self.proyectitos=proyectos
+
+    def menu(self):
+        #Construimos un menu para que el usuario elija la accion a realizar
+        print("--------------------")
+        print("Gestion de Tareas ")
+        print("Elija la operacion a realizar:")
+        print("1.- Agregar Tareas a Proyecto ")
+        print("2.- Mostrar Tareas del Proyecto ")
+        print()
+        self.opcion=str(input("Elija su opcion: "))
+        if self.opcion=="1":
+            self.agreagar_proyecto()
+            self.mostrar_ALL_proyectos()
+        elif self.opcion=="2":
+            pass
+
+
+    def buscar_proyectos(self):  # Añadir self como primer parámetro
+        print("Buscar Proyecto por: ")
+        print("1.- Nombre: ")
+        print("2.- Empresa: ")
+        print("3.- Gerente: ")
+        print("4.- Equipo: ")
+        criterio = str(input("Ingrese opcion: "))
+
+        if criterio == "1":
+            nombre = str(input("Introduzca el nombre del proyecto: "))
+            filtrado = [proyecto for proyecto in self.proyectitos if nombre.lower() in proyecto.nombre.lower()]
+            if filtrado == []:
+                print("No existen proyectos con ese nombre")
+                return None
+
+        elif criterio == "2":
+            empresa = str(input("Introduzca la empresa del proyecto: "))
+            filtrado = [proyecto for proyecto in self.proyectitos if empresa.lower() in proyecto.empresa.lower()]
+            if filtrado == []:
+                print("No existen proyectos de esa empresa")
+                return None
+
+        elif criterio == "3":
+            gerente = str(input("Introduzca nombre del gerente del proyecto: "))
+            filtrado = [proyecto for proyecto in self.proyectitos if gerente.lower() in proyecto.gerente.lower()]
+            if filtrado == []:
+                print("No existen proyectos administrados por ese gerente")
+                return None
+
+        elif criterio == "4":
+            integrante = str(input("Introduzca al integrante del equipo del proyecto: "))
+            filtrado = [proyecto for proyecto in self.proyectitos if any(integrante.lower() in miembro.lower() for miembro in proyecto.equipo)]
+            if filtrado == []:
+                print("No existen proyectos administrados por ese equipo")
+                return None
+
+        else:
+            print("Opcion Invalida")
+
+        if filtrado:
+            print("Proyectos encontrados: ")
+            for proyecto in filtrado:
+                print('ID: {:^10} / Nombre: {:^15}  /  Empresa: {:^15}  /  Equipo: {:^10}  /  Gerente: {:^10}'.format(proyecto.id, proyecto.nombre, proyecto.empresa, ", ".join(proyecto.equipo), proyecto.gerente))
+
+            seleccion = str(input("\nSeleccione el ID del proyecto que desea operar: "))
+            for proyecto in filtrado:
+                if seleccion == str(proyecto.id):
+                    return proyecto
+
+            print("ID invalido")
+            return None
+   
 
     def agreagar_proyecto(self):
-        proyectitos = Cargar.cargar_datos_desde_json("config.txt")
-        gestion_proyecto = Gestion_de_proyecto()  # Crear instancia de Gestion_de_proyecto
-        proyecto = gestion_proyecto.buscar_proyectos() 
+        proyecto=self.buscar_proyectos()
         band = input("¿Desear agregar Tarea? Si-> s No -> n: ")
         band_yn = 1 #Para que el usuario ingresa bien la opcion
         aux_tarea = []
@@ -413,6 +532,7 @@ class proyecto_pila:
 class Menu_Principal:
     
     def __init__(self):
+        self.proyectos=Cargar.cargar_datos_desde_json("config.txt")
         self.menu()
     
     def menu(self):
@@ -423,14 +543,19 @@ class Menu_Principal:
         print("1.- Gestion de Proyectos. ")
         print("2.- Gestion de Tareas. ")
         print()
+        
         self.opcion=str(input("Elija su opcion: "))
+ 
+        
         if self.opcion=="1":
-            gestion=Gestion_de_proyecto()
-            gestion.menu()
+            gestion=Gestion_de_proyecto(self.proyectos)
+            self.proyectos=gestion.menu()
+            
+            
         elif self.opcion=="2":
-                papa = proyecto_pila()
-                papa.agreagar_proyecto()
-                papa.mostrar_ALL_proyectos()
+
+            papa = proyecto_pila(self.proyectos)
+            papa.menu()
                 
         
             
