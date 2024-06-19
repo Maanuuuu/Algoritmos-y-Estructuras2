@@ -15,14 +15,26 @@ class Reporte:
             print("5. Salir")
             opcion = int(input("Ingrese la opcion: "))
             if opcion == 1:
-                self.reporte_proyectos(proyectitos)
+                self.consult_tarea_est(self.proyectitos)
             elif opcion == 2:
-                self.reporte_tareas(proyectitos)
+                self.filtrado_fechas(self.proyectitos)
             elif opcion == 3:
-                self.reporte_subtareas(proyectitos)
+                self.filtrado_proyectos(self.proyectitos)
             elif opcion == 4:
-                self.reporte_subtareas(proyectitos)
+                self.listar_sub_tareas(self.proyectitos)
             elif opcion == 5:
                 break
             else:
                 print("Opcion invalida")
+
+    def consult_tarea_est(self,proyectitos):
+        pass
+
+    def filtrado_fechas(self,proyectitos):
+        pass
+
+    def filtrado_proyectos(self,proyectitos):
+        pass
+
+    def listar_sub_tareas(self,proyectitos):
+        pass
