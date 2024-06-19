@@ -28,7 +28,9 @@ class Reporte:
                 print("Opcion invalida")
 
     def consult_tarea_est(self,proyectitos):
-        
+        for proyecto in self.proyectitos:
+            for tarea in proyecto.tareas:
+                tarea.mostrar_tarea()
         pass
 
     def filtrado_fechas(self,proyectitos):

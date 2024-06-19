@@ -1,6 +1,6 @@
 from datetime import datetime
 import json
-
+import Modulo_Reportes as mr
 #Funcion para la lectura de datos del JSON
 
 
@@ -432,6 +432,7 @@ class Menu_Principal:
         print("Elija la operacion a realizar:")
         print("1.- Gestion de Proyectos. ")
         print("2.- Gestion de Tareas. ")
+        print("3.- Reportes.")
         print()
         self.opcion=str(input("Elija su opcion: "))
         if self.opcion=="1":
@@ -441,10 +442,9 @@ class Menu_Principal:
                 papa = proyecto_pila()
                 papa.agreagar_proyecto()
                 papa.mostrar_ALL_proyectos()
-                
-        
-            
-            
+        elif self.opcion=="3":
+            reporte=mr.Reporte()
+                    
         print()
         print("----------")
         print("Desea seguir con el sistema de gestion?: ")
