@@ -570,7 +570,9 @@ class Menu_Principal:
             papa = proyecto_pila(self.proyectos)
             papa.menu()
                 
-        
+        elif self.opcion=="3":
+            reporte=mr.Reporte()
+            
             
             
         print()
