@@ -56,7 +56,7 @@ class Tarea:
     def agregar_subtarea(self,subtarea):
         self.subtareas.append(subtarea)
 
-    def mostar_tarea(self):
+    def mostrar_tarea(self):
         print('------')
         print('ID: {:<10}'.format(self.id))
         print('Nombre: {:<15}'.format(self.nombre))
