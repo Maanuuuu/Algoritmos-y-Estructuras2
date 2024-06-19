@@ -450,7 +450,7 @@ class Menu_Principal:
         print("Desea seguir con el sistema de gestion?: ")
         print("1.- Si\n2.-No")
         seguir=(input(">. "))
-              
+        
         if seguir=="1":
             print("")
             self.menu()
