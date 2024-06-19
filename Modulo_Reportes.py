@@ -1,5 +1,6 @@
 import Gestion_Proyectos as gp
 import datos_abstracto as da
+from datetime import datetime
 
 class Reporte:
     def __init__(self):
@@ -55,7 +56,87 @@ class Reporte:
             print(list_pilas[i].mostrar_pila_tareas())
 
     def filtrado_fechas(self,proyectitos):
-        pass
+        def menu_tip_fecha():
+            print("-------------------------------")
+            print("Filtrado por fechas")
+            print("Ingrese con que fecha se va a filtar: ")
+            print("1.- Fecha de inicio.")
+            print("2.- Fecha de vencimiento.")
+            return input("Ingrese la opcion: ")
+        
+        def menu_filtrado():
+            print("-------------------------------")
+            print("Filtrado por fechas")
+            print("Ingrese el tipo de filtrado: ")
+            print("1.- Rango de fechas.")
+            print("2.- Antes de la fecha.")
+            print("3.- Despues de la fecha.")
+            return input("Ingrese la opcion: ")
+        
+        def fecha():
+            return datetime.strptime(input("Ingrese la fecha en formato dd-mm-aaaa: "),"%d-%m-%Y")
+
+        def rango():
+            fecha1=fecha()
+            fecha2=fecha()
+            return fecha1,fecha2
+
+        def filtrado_rango(fecha1,fecha2,criterio):
+            for proyecto in self.proyectitos:
+                for tarea in proyecto.tareas:
+                    if criterio=="inicio":
+                        if tarea.fecha_inicio>=fecha1 and tarea.fecha_inicio<=fecha2:
+                            pass
+                    else:
+                        if tarea.fecha_vencimiento>=fecha1 and tarea.fecha_vencimiento<=fecha2:
+                            pass
+
+
+        def filtrado_antes(fecha,criterio):
+            for proyecto in self.proyectitos:
+                for tarea in proyecto.tareas:
+                    if criterio=="inicio":
+                        if tarea.fecha_inicio<fecha:
+                            pass
+                    else:
+                        if tarea.fecha_vencimiento<fecha:
+                            pass
+
+        def filtrado_despues(fecha,criterio):
+            for proyecto in self.proyectitos:
+                for tarea in proyecto.tareas:
+                    if criterio=="inicio":
+                        if tarea.fecha_inicio>fecha:
+                            pass
+                    else:
+                        if tarea.fecha_vencimiento>fecha:
+                            pass
+                    
+        
+        def main():
+            mtf=menu_tip_fecha()
+            if mtf=="1":
+                criterio="inicio"
+            elif mtf=="2":
+                criterio="vencimiento"
+            else:
+                print("Opcion invalida")
+                main()
+            
+            mf=menu_filtrado()
+            if mf=="1":
+                fecha1,fecha2=rango()
+                filtrado_rango(fecha1,fecha2,criterio)
+            elif mf=="2":
+                fecha=fecha()
+                filtrado_antes(fecha,criterio)
+            elif mf=="3":
+                fecha=fecha()
+                filtrado_despues(fecha,criterio)
+            else:
+                print("Opcion invalida")
+                main()
+
 
     def filtrado_proyectos(self,proyectitos):
         pass
