@@ -29,9 +29,15 @@ class Reporte:
 
     def consult_tarea_est(self,proyectitos):
         est=input("Indica el estado de la tarea: ")
+        list_estados=[]
         for proyecto in self.proyectitos:
             for tarea in proyecto.tareas:
-                pass
+                if tarea.estado in list_estados:
+                    pass
+                else:
+                    list_estados.append(tarea.estado)
+                    
+                    
                 
         
 
