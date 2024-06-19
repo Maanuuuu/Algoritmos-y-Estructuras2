@@ -48,7 +48,6 @@ class Tarea:
         self.inicio=inicio
         self.vencimiento=vencimiento
         self.estado=estado
-  
         self.porcentaje=porcentaje
         self.subtareas=[]
         self.siguiente=None
@@ -56,7 +55,18 @@ class Tarea:
 
     def agregar_subtarea(self,subtarea):
         self.subtareas.append(subtarea)
-        
+
+    def mostar_tarea(self):
+        print('------')
+        print('ID: {:<10}'.format(self.id))
+        print('Nombre: {:<15}'.format(self.nombre))
+        print('Cliente: {:<15}'.format(self.empresa))
+        print('Descripcion: {:<15}'.format(self.descripcion))
+        print('Inicio: {:<15}'.format(self.inicio.strftime("%d-%m-%Y")))
+        print('Vencimiento: {:<15}'.format(self.vencimiento.strftime("%d-%m-%Y")))
+        print('Estado: {:<15}'.format(self.estado))
+        print('Porcentaje: {:<10}'.format(self.porcentaje))
+        print('------')
 
 class Subtarea:
     def __init__(self, id, nombre, descripcion, estado):
