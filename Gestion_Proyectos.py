@@ -8,7 +8,7 @@ import datos_abstracto as da
     
     Manuel Nava  30.822.007  @Maanuuuu
     Juan Wu      30.391.117  @juanww20    
-    Jose Farrautto 
+    Jose Farrautto  30.696.288 @farreto06
 
 """
 
