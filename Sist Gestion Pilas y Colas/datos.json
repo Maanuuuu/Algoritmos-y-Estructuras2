@@ -1,0 +1,130 @@
+{
+  "proyectos": [
+    {
+      "id": 1,
+      "nombre": "Proyecto Log",
+      "descripcion": "Desarollo de modulo ventas",
+      "inicio": "05-06-2024",
+      "vencimiento": "29-06-2024",
+      "estado": "En progreso",
+      "empresa": "CanTV ",
+      "gerente": "Gerente A",
+      "equipo": ["Miembro1", "Miembro2"],
+      "tareas": [
+        {
+          "id": 101,
+          "nombre": "Tarea 1",
+          "cliente": "Cliente 1",
+          "descripcion": "Descripción de la Tarea 1",
+          "inicio": "15-01-2023",
+          "vencimiento": "15-02-2023",
+          "estado": "Pendiente",
+          "avance": 20,
+          "subtareas": [
+            {
+              "id": 1001,
+              "nombre": "Subtarea 1",
+              "descripcion": "Descripción de la Subtarea 1",
+              "estado": "Pendiente"
+            }
+          ]
+        },
+        {
+          "id": 102,
+          "nombre": "Tarea 2",
+          "cliente": "Cliente 2",
+          "descripcion": "Descripción de la Tarea 2",
+          "inicio": "01-03-2023",
+          "vencimiento": "01-04-2023",
+          "estado": "Completada",
+          "avance": 100,
+          "subtareas": []
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "nombre": "Proyecto Beta",
+      "descripcion": "Descripción del Proyecto Beta",
+      "inicio": "01-02-2023",
+      "vencimiento": "30-11-2023",
+      "estado": "En progreso",
+      "empresa": "EPA",
+      "gerente": "Gerente B",
+      "equipo": ["Miembro3", "Miembro4"],
+      "tareas": [
+        {
+          "id": 201,
+          "nombre": "Tarea 3",
+          "cliente": "Cliente 3",
+          "descripcion": "Descripción de la Tarea 3",
+          "inicio": "15-02-2023",
+          "vencimiento": "15-03-2023",
+          "estado": "En progreso",
+          "avance": 50,
+          "subtareas": []
+        },
+        {
+          "id": 202,
+          "nombre": "Tarea 4",
+          "cliente": "Cliente 4",
+          "descripcion": "Descripción de la Tarea 4",
+          "inicio": "01-04-2023",
+          "vencimiento": "01-05-2023",
+          "estado": "Pendiente",
+          "avance": 0,
+          "subtareas": [
+            {
+              "id": 2001,
+              "nombre": "Subtarea 2",
+              "descripcion": "Descripción de la Subtarea 2",
+              "estado": "Pendiente"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "nombre": "Proyecto Gamma",
+      "descripcion": "Descripción del Proyecto Gamma",
+      "inicio": "01-03-2023",
+      "vencimiento": "31-10-2023",
+      "estado": "Completado",
+      "empresa": "EPA",
+      "gerente": "Gerente C",
+      "equipo": ["Miembro1", "Miembro3"],
+      "tareas": [
+        {
+          "id": 301,
+          "nombre": "Tarea 5",
+          "cliente": "Cliente 5",
+          "descripcion": "Descripción de la Tarea 5",
+          "inicio": "15-03-2023",
+          "vencimiento": "15-04-2023",
+          "estado": "Completada",
+          "avance": 100,
+          "subtareas": []
+        },
+        {
+          "id": 302,
+          "nombre": "Tarea 6",
+          "cliente": "Cliente 6",
+          "descripcion": "Descripción de la Tarea 6",
+          "inicio": "01-05-2023",
+          "vencimiento": "01-06-2023",
+          "estado": "En progreso",
+          "avance": 75,
+          "subtareas": [
+            {
+              "id": 3001,
+              "nombre": "Subtarea 3",
+              "descripcion": "Descripción de la Subtarea 3",
+              "estado": "En progreso"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
