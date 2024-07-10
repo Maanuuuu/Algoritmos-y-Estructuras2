@@ -23,11 +23,12 @@ def Identificar_fv ():
 def menu_principal():
     gestor_empresas = GestorEmpresas()
     while True:
-        print("\nMenu Principal")
-        print("1. Gestionar Empresas")
-        print("2. Gestionar Proyectos")
+        print("\nSistema Avanzado de Gestion de Proyectos y Tareas")
+        print("Elija su opcion:")
+        print("1. Gestion de Empresas")
+        print("2. Gestion de Proyectos")
         print("3. Salir")
-        opcion = input("Seleccione una opción: ")
+        opcion = input(">. ")
 
         if opcion == '1':
             menu_gestor_empresas(gestor_empresas)
@@ -36,7 +37,7 @@ def menu_principal():
         elif opcion == '3':
             break
         else:
-            print("Opción no válida. Intente de nuevo.")
+            print("Opcion Invalida.")
 
 # Menú para gestión de empresas
 def menu_gestor_empresas(gestor_empresas):
@@ -160,9 +161,8 @@ def gestion_proyectos(gestor_empresas):
         elif opcion == '4':
             eliminar_proyecto(gestor_empresas)
         elif opcion == '5':
-            buscar_proyectos(gestor_empresas)
+            pass
         elif opcion == '6':
-            gestor_empresas.gestion_proyectos.actualizar_tiempos_restantes()
             print("Tiempos restantes actualizados.")
         elif opcion == '7':
             break
@@ -177,10 +177,11 @@ def agregar_proyecto(gestor_empresas):
     fecha_inicio = Identificar_fi()
     fecha_vencimiento = Identificar_fv()
     estado_actual = input("Ingrese el estado actual del proyecto: ")
+    empresa=input("Ingrese la empresa del proyecto: ")
     gerente = input("Ingrese el nombre del gerente del proyecto: ")
     equipo = input("Ingrese los miembros del equipo (separados por comas): ").split(',')
 
-    if gestor_empresas.agregar_proyecto(id_empresa, id, nombre, descripcion, fecha_inicio, fecha_vencimiento, estado_actual, gerente, equipo):
+    if gestor_empresas.agregar_proyecto(id_empresa, id, nombre, descripcion, fecha_inicio, fecha_vencimiento, estado_actual,empresa, gerente, equipo):
         print("Proyecto agregado con éxito.")
     else:
         print("No se pudo agregar el proyecto. Verifique el ID de la empresa.")
