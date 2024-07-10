@@ -1,0 +1,6 @@
+id,nombre,descripcion,fecha_creacion,direccion,telefono,correo,gerente,equipo_contacto
+2,InnovaWeb,Soluciones web,2021-11-20,Calle Innovación 456,555-5678,info@innovaweb.com,María Torres,"Pedro Sánchez, Laura Ruiz"
+3,Nose,Ciberseguridad,2020-06-30,Plaza Seguridad 789,555-9101,seguridad@datasecure.com,José Fernández,"Marta Díaz, Jorge López"
+4,BioHealth,Tecnología médica,2019-09-05,Parque Salud 101,555-1122,salud@biohealth.com,Lucía Martínez,"Sofía González, Pablo Ramírez"
+5,EcoEnergy,Energías renovables,2023-03-22,Av. Energía 202,555-3344,energia@ecoenergy.com,Roberto García,"Natalia Vega, Andrés Castro"
+1,hola,empresa nueva,23-05-2005,,asa,sa,sa,s
