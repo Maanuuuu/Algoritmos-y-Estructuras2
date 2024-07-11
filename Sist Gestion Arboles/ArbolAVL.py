@@ -121,54 +121,54 @@ uva2 = Empresa_work(8,"Uva2_empresa","Mucho trabajo","fecha inicial","ficha fina
 lista.append(uva)
 lista.append(uva2)
 
+def menu4():
+    bandera = 1
+    while bandera:
+        print("")
+        print("1. -> Consultar todos los proyectos existentes")
+        print("2. -> Insertar un nuevo proyecto")
+        print("7. -> Salir la programa")
+        pregunta = input("Elige la opcion: ")
 
-bandera = 1
-while bandera:
-    print("")
-    print("1. -> Consultar todos los proyectos existentes")
-    print("2. -> Insertar un nuevo proyecto")
-    print("7. -> Salir la programa")
-    pregunta = input("Elige la opcion: ")
+        if pregunta == "1":
+            avl_fs.in_order(avl_fs.raiz)
 
-    if pregunta == "1":
-        avl_fs.in_order(avl_fs.raiz)
-
-    elif pregunta == "2": 
-        opcion = "0"
-        print()
-        print("1. -> Insertar directamente")
-        print("2. -> Elegir un proyecto para pasar al gestion de sprint")
-        opcion = input("Elige la opcion: ")
-        if opcion == "1":
+        elif pregunta == "2": 
+            opcion = "0"
             print()
-            ide = input("El id de proyecto: ")
-            bandera_numeral = 0
-            while bandera_numeral==0:
-                if ide.isdigit():
-                    bandera_numeral = 1
-                else:
-                    print("")
-                    print("Ha ingresado los caracteres incorrectas, por favor ingresar de nuevo")
-                    ide = input("Cuanto cantidad de tarea quiere agregar: ")
+            print("1. -> Insertar directamente")
+            print("2. -> Elegir un proyecto para pasar al gestion de sprint")
+            opcion = input("Elige la opcion: ")
+            if opcion == "1":
+                print()
+                ide = input("El id de proyecto: ")
+                bandera_numeral = 0
+                while bandera_numeral==0:
+                    if ide.isdigit():
+                        bandera_numeral = 1
+                    else:
+                        print("")
+                        print("Ha ingresado los caracteres incorrectas, por favor ingresar de nuevo")
+                        ide = input("Cuanto cantidad de tarea quiere agregar: ")
+                
+                #Ingreso datos por el usuario
+                ide_verdadero = int(ide)
+                nombre = input("El nombre: ")
+                descripcion = input("El descripcion: ")
+                fecha_inicio = datetime.strptime(input("Ingrese la fecha de inicio del proyecto (Dia-Mes-Año): "), "%d-%m-%Y")
+                fecha_final = datetime.strptime(input("Ingrese la fecha de vencimiento del proyecto (Dia-Mes-Año): "), "%d-%m-%Y")
+                estado = input("El estado de proyecto: ")
+                objetivos = input("El objetivo de proyecto: ")
+                equipo = input("El equipo de proyecto: ")
+                avl_fs.insertar_archivo(ide_verdadero,nombre,descripcion,fecha_inicio,fecha_final,estado,objetivos,equipo)
+
+            elif opcion == "2":
+                opcion_seleccion = int(input("Dar la opcion de lista que no ha entrado en la gestion de sprint: "))
+                avl_fs.insertar_otro_externo_para_nuevo(lista[opcion_seleccion-1])
+            else:
+                print()
+                print("Ingresado mal caracteres, por lo tanto regresa el inicio")
             
-            #Ingreso datos por el usuario
-            ide_verdadero = int(ide)
-            nombre = input("El nombre: ")
-            descripcion = input("El descripcion: ")
-            fecha_inicio = datetime.strptime(input("Ingrese la fecha de inicio del proyecto (Dia-Mes-Año): "), "%d-%m-%Y")
-            fecha_final = datetime.strptime(input("Ingrese la fecha de vencimiento del proyecto (Dia-Mes-Año): "), "%d-%m-%Y")
-            estado = input("El estado de proyecto: ")
-            objetivos = input("El objetivo de proyecto: ")
-            equipo = input("El equipo de proyecto: ")
-            avl_fs.insertar_archivo(ide_verdadero,nombre,descripcion,fecha_inicio,fecha_final,estado,objetivos,equipo)
-
-        elif opcion == "2":
-            opcion_seleccion = int(input("Dar la opcion de lista que no ha entrado en la gestion de sprint: "))
-            avl_fs.insertar_otro_externo_para_nuevo(lista[opcion_seleccion-1])
-        else:
-            print()
-            print("Ingresado mal caracteres, por lo tanto regresa el inicio")
-        
-    elif pregunta == "7":
-        bandera = 0
-        print("Salir el modo de gestión de sprint")
+        elif pregunta == "7":
+            bandera = 0
+            print("Salir el modo de gestión de sprint")

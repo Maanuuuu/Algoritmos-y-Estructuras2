@@ -1,5 +1,5 @@
 from datetime import datetime
-from AVLTree import *
+from ArbolProyectos import *
 
 class Proyecto:
     def __init__(self, id, nombre, descripcion, fecha_inicio, fecha_vencimiento, estado_actual, empresa, gerente, equipo):
