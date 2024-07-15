@@ -70,10 +70,9 @@ class ListaEnlazada:
         return lista_empresas
 
 
-
 class GestorEmpresas:
     def __init__(self):
-        self.archivo_csv = "empresas.csv"
+        self.archivo_csv = "Sist Gestion Arboles\empresasitas.csv"
         self.lista_empresas = ListaEnlazada()
         self.gestor_proyectos = GestorProyectos()
         self.cargar_empresas()
@@ -83,7 +82,6 @@ class GestorEmpresas:
             with open(self.archivo_csv, newline='') as csvfile:
                 reader = csv.DictReader(csvfile)
                 for fila in reader:
-                    
                     empresa = Empresa(
                         fila['id'],
                         fila['nombre'],
@@ -98,9 +96,7 @@ class GestorEmpresas:
                     self.lista_empresas.agregar_nodo(empresa)
         except FileNotFoundError:
             print(f"El archivo {self.archivo_csv} no se encontró. Se creará uno nuevo.")
-        
-
-
+    
     def guardar_empresas(self):
         with open(self.archivo_csv, 'w', newline='') as csvfile:
             fieldnames = ['id', 'nombre', 'descripcion', 'fecha_creacion', 'direccion', 'telefono', 'correo', 'gerente', 'equipo_contacto']
@@ -141,17 +137,19 @@ class GestorEmpresas:
             return True
         return False
 
+
     def eliminar_empresa(self, id):
         if self.lista_empresas.eliminar_nodo(id):
             self.guardar_empresas()
             return True
         return False
 
-    def agregar_proyecto(self, id_empresa, id, nombre, descripcion, fecha_inicio, fecha_vencimiento, estado_actual,empresa, gerente, equipo):
+    def agregar_proyecto(self, id_empresa, id, nombre, descripcion, fecha_inicio, fecha_vencimiento, estado_actual, empresa, gerente, equipo):
         empresa = self.buscar_empresa(id_empresa)
         if empresa:
-            proyecto = Proyecto(id, nombre, descripcion, fecha_inicio, fecha_vencimiento, estado_actual,empresa, gerente, equipo)
+            proyecto = Proyecto(id, nombre, descripcion, fecha_inicio, fecha_vencimiento, estado_actual, empresa, gerente, equipo)
             empresa.proyectos.append(proyecto)
+            self.guardar_empresas()  # Guardar cambios en el archivo
             return True
         return False
 
@@ -169,11 +167,3 @@ class GestorEmpresas:
         else:
             print("No se encontró la empresa con el ID proporcionado.")
             return False
-        
-    def listar_proyectos_empresa(gestor_empresas):
-        id_empresa = input("Ingrese el ID de la empresa para listar sus proyectos: ")
-        if gestor_empresas.listar_proyectos(id_empresa):
-            print("Listado de proyectos completado.")
-        else:
-            print("No se encontró la empresa o no tiene proyectos.")
-

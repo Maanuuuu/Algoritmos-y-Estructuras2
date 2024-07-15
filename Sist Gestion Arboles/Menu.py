@@ -1,6 +1,8 @@
 from Modulo1 import *
 from datetime import datetime
 from ArbolAVL import *
+from Gestion_tarea_prioridad import *
+from Modulo5 import *
 
 def Identificar_fi ():
     try:
@@ -28,8 +30,11 @@ def menu_principal():
         print("Elija su opcion:")
         print("1. Gestion de Empresas")
         print("2. Gestion de Proyectos")
-        print("3. Gestion de Sprints")
-        print("3. Salir")
+        print("3. Gestion de Tareas y Prioridades")
+        print("4. Gestion de Sprints")
+        print("5. Gestion de Reportes")
+
+        print("5. Salir")
         opcion = input(">. ")
 
         if opcion == '1':
@@ -37,7 +42,12 @@ def menu_principal():
         elif opcion == '2':
             gestion_proyectos(gestor_empresas)
         elif opcion == '3':
+            menu3()
+        elif opcion == '4':
             menu4()
+        elif opcion =="5":
+            menu5()
+
         else:
             print("Opcion Invalida.")
 
@@ -71,16 +81,66 @@ def menu_gestor_empresas(gestor_empresas):
         else:
             print("Opción no válida. Intente de nuevo.")
 
+
+from datetime import datetime
+
+def es_fecha_valida(fecha):
+    try:
+        datetime.strptime(fecha, "%Y-%m-%d")
+        return True
+    except ValueError:
+        return False
+
+def es_correo_valido(correo):
+    partes = correo.split('@')
+    if len(partes) == 2 and '.' in partes[1]:
+        return True
+    return False
+
+def es_telefono_valido(telefono):
+    if telefono.isdigit() or (telefono.count('-') == 1 and all(part.isdigit() for part in telefono.split('-'))):
+        return True
+    return False
+
 def agregar_empresa(gestor_empresas):
     try:
-        id_empresa = input("Ingresa el id de la empresa: ")
+        while True:
+            id_empresa = input("Ingresa el id de la empresa: ")
+            if id_empresa.isdigit():
+                id_empresa = int(id_empresa)
+                break
+            else:
+                print("El ID debe ser un número. Inténtalo de nuevo.")
+        
         nombre = input("Ingresar el nombre de la empresa: ")
+        
         descripcion = input("Descripcion de la empresa: ")
-        fecha_creacion = input("Ingresa la fecha de creación (YYYY-MM-DD): ")
+        
+        while True:
+            fecha_creacion = input("Ingresa la fecha de creación (YYYY-MM-DD): ")
+            if es_fecha_valida(fecha_creacion):
+                break
+            else:
+                print("La fecha no es válida. Inténtalo de nuevo.")
+
         direccion = input("Ingrese la direccion de la empresa: ")
-        telefono = input("Ingrese el numero de telefono de la empresa: ")
-        correo = input("Ingrese el correo de la empresa: ")
+        
+        while True:
+            telefono = input("Ingrese el numero de telefono de la empresa: ")
+            if es_telefono_valido(telefono):
+                break
+            else:
+                print("El número de teléfono no es válido. Inténtalo de nuevo.")
+        
+        while True:
+            correo = input("Ingrese el correo de la empresa: ")
+            if es_correo_valido(correo):
+                break
+            else:
+                print("El correo electrónico no es válido. Inténtalo de nuevo.")
+        
         gerente = input("Ingrese el gerente de la empresa: ")
+        
         equipo_contacto = input("Ingrese el equipo de contacto de la empresa: ")
 
         gestor_empresas.crear_empresa(id_empresa, nombre, descripcion, fecha_creacion, direccion, telefono, correo, gerente, equipo_contacto)
@@ -101,8 +161,7 @@ def modificar_empresa(gestor_empresas):
         gerente = input(f"Nuevo gerente ({empresa.gerente}): ") or empresa.gerente
         equipo_contacto = input(f"Nuevo equipo de contacto ({empresa.equipo_contacto}): ") or empresa.equipo_contacto
 
-        if gestor_empresas.modificar_empresa(id_empresa, nombre=nombre, descripcion=descripcion, direccion=direccion, 
-                                              telefono=telefono, correo=correo, gerente=gerente, equipo_contacto=equipo_contacto):
+        if gestor_empresas.modificar_empresa(id_empresa, nombre=nombre, descripcion=descripcion, direccion=direccion, telefono=telefono, correo=correo, gerente=gerente, equipo_contacto=equipo_contacto):
             print("Empresa modificada con éxito.")
         else:
             print("No se pudo modificar la empresa.")
@@ -148,13 +207,12 @@ def gestion_proyectos(gestor_empresas):
         print("2. Agregar Proyecto")
         print("3. Modificar Proyecto")
         print("4. Eliminar Proyecto")
-        print("5. Buscar Proyectos")
-        print("6. Actualizar Tiempos Restantes")
-        print("7. Volver al Menú Principal")
+        print("5. Volver al Menú Principal")
         opcion = input("Seleccione una opción: ")
 
         if opcion == '1':
             id_empresa = input("Ingrese el ID de la empresa: ")
+
             gestor_empresas.listar_proyectos(id_empresa)
         elif opcion == '2':
             agregar_proyecto(gestor_empresas)
@@ -162,11 +220,7 @@ def gestion_proyectos(gestor_empresas):
             modificar_proyecto(gestor_empresas)
         elif opcion == '4':
             eliminar_proyecto(gestor_empresas)
-        elif opcion == '5':
-            pass
         elif opcion == '6':
-            print("Tiempos restantes actualizados.")
-        elif opcion == '7':
             break
         else:
             print("Opción no válida. Intente de nuevo.")
